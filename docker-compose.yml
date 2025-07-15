@@ -1,0 +1,31 @@
+version:  "3.9"
+ 
+services:
+   pyspark-app:
+       build:  .
+       container_name:  pyspark_app
+       depends_on:
+            - postgres
+       volumes:
+           -  .:/app
+       command:   spark-submit --jars  /opt/spark/jars/postgresql-42.7.3.jar  ejemplo.py
+       environment:
+           -  PYSPARK_PYTHON=python3
+ 
+   postgres:
+        image:  postgres:15
+        container_name:  postgres_db
+        restart:  always
+        ports:
+            - "5432:5432"
+        environment:
+           POSTGRES_USER:  usuario
+           POSTGRES_PASSWORD:  clave_segura
+           POSTGRES_DB:  pruebas_db
+        volumes:
+           -  pgdata:/var/lib/postgresql/data
+ 
+volumes:
+     pgdata:
+
+     
